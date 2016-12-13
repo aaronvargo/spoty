@@ -171,7 +171,7 @@ instance FromJSON Artist where
                          v .: "href" <*>
                          v .: "id" <*>
                          v .: "name" <*>
-                         v .: "uri" <*> 
+                         v .: "uri" <*>
                          require "genres" v
 
   parseJSON _          = mzero
@@ -262,7 +262,7 @@ instance FromJSON AlbumDetails where
 data Album
   = Album
   {
-    _albumType :: T.Text,
+    _albumTyp :: T.Text,
     _albumAvailableMarkets :: [T.Text],
     _albumExternalURLs :: [ExternalURL],
     _albumHref :: T.Text,
@@ -286,6 +286,7 @@ instance FromJSON Album where
                          v .: "images" <*>
                          v .: "name" <*>
                          v .: "uri" <*>
-                         require "artists" v
+                         return Nothing
+                         -- require "artists" v
 
   parseJSON _          = mzero
