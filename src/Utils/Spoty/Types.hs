@@ -33,7 +33,7 @@ require str obj =
 -- | Parse a map of key-value entries, wrapped in the given constructor.
 parseStrMap :: MonadPlus m => HM.HashMap k Value -> (k -> T.Text -> a) -> m [a]
 parseStrMap vals constr = sequence . flip map (HM.toList vals) $ \e ->
-  case e of 
+  case e of
     (key, String val) -> return $ constr key val
     _                 -> mzero
 
@@ -47,7 +47,7 @@ data ExternalID
 
 makeFields ''ExternalID
 
-instance FromJSON [ExternalID] where
+instance {-# OVERLAPPING #-} FromJSON [ExternalID] where
   parseJSON (Object v) = parseStrMap v ExternalID
   parseJSON _          = mzero
 
@@ -61,7 +61,7 @@ data ExternalURL
 
 makeFields ''ExternalURL
 
-instance FromJSON [ExternalURL] where
+instance {-# OVERLAPPING #-} FromJSON [ExternalURL] where
   parseJSON (Object v) = parseStrMap v ExternalURL
   parseJSON _          = mzero
 
@@ -227,7 +227,7 @@ instance FromJSON Track where
                          v .: "name" <*>
                          v .: "preview_url" <*>
                          v .: "track_number" <*>
-                         v .: "uri" <*> 
+                         v .: "uri" <*>
                          require "available_markets" v
 
   parseJSON _          = mzero
